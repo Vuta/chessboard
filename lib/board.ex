@@ -1,0 +1,16 @@
+defmodule Board do
+  defstruct [
+    w_pawns: 0x0000000000000FF00,
+    w_knights: 0x0000000000000042,
+    w_bishops: 0x0000000000000024,
+    w_rooks: 0x0000000000000081,
+    w_queens: 0x0000000000000008,
+    w_king: 0x0000000000000010,
+    b_pawns: 0x00FF000000000000,
+    b_knights: 0x4200000000000000,
+    b_bishops: 0x2400000000000000,
+    b_rooks: 0x8100000000000000,
+    b_queens: 0x0800000000000000,
+    b_king: 0x1000000000000000
+  ]
+end
