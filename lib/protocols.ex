@@ -1,5 +1,7 @@
 defimpl String.Chars, for: Board do
   def to_string(board) do
+    alias TableRex.Table
+
     pieces = %{
       "\u2659" => board.w_pawns,
       "\u2658" => board.w_knights,
@@ -16,14 +18,15 @@ defimpl String.Chars, for: Board do
     }
 
     for rank <- 7..0, file <- 0..7, into: [] do
-      {unicode, _} = Enum.find(pieces, {".", nil}, fn {_, piece_bits} ->
+      {unicode, _} = Enum.find(pieces, {"", nil}, fn {_, piece_bits} ->
         square_value = Bitwise.bsl(1, rank * 8 + file)
         Bitwise.band(piece_bits, square_value) != 0
       end)
 
-      unicode <> " "
+      unicode
     end
     |> Enum.chunk_every(8)
-    |> Enum.join("\n")
+    |> Table.new()
+    |> Table.render!(intersection_symbol: "|", horizontal_style: :all)
   end
 end
