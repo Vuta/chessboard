@@ -18,4 +18,24 @@ defmodule Masks do
   # 0 1 1 1 1 1 1 1
   # 0 1 1 1 1 1 1 1
   def clear_a_file, do: 0xFEFEFEFEFEFEFEFE
+
+  # 0 0 1 1 1 1 1 1
+  # 0 0 1 1 1 1 1 1
+  # 0 0 1 1 1 1 1 1
+  # 0 0 1 1 1 1 1 1
+  # 0 0 1 1 1 1 1 1
+  # 0 0 1 1 1 1 1 1
+  # 0 0 1 1 1 1 1 1
+  # 0 0 1 1 1 1 1 1
+  def clear_ab_file, do: 0xFCFCFCFCFCFCFCFC
+
+  # 1 1 1 1 1 1 0 0
+  # 1 1 1 1 1 1 0 0
+  # 1 1 1 1 1 1 0 0
+  # 1 1 1 1 1 1 0 0
+  # 1 1 1 1 1 1 0 0
+  # 1 1 1 1 1 1 0 0
+  # 1 1 1 1 1 1 0 0
+  # 1 1 1 1 1 1 0 0
+  def clear_gh_file, do: 0x3F3F3F3F3F3F3F3F
 end
