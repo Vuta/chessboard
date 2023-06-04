@@ -1,3 +1,7 @@
 %{
+  "arrays": {:hex, :arrays, "2.0.2", "3a5d4327faedf16ba9c60640928e136592b43849bd07324d95de7a9190025d46", [:mix], [{:extractable, "~> 1.0", [hex: :extractable, repo: "hexpm", optional: false]}, {:fun_land, "~> 0.10.0", [hex: :fun_land, repo: "hexpm", optional: true]}, {:insertable, "~> 1.0", [hex: :insertable, repo: "hexpm", optional: false]}], "hexpm", "c3a8c109bc6665534e6673705f914a3efc6a28a97a3f629fb32f8a35057243b3"},
+  "extractable": {:hex, :extractable, "1.0.1", "2cf2b213cbda82eb578c821de48fa313cddfa7573b256bce4306248f56b44509", [:mix], [{:type_check, "~> 0.8", [hex: :type_check, repo: "hexpm", optional: false]}], "hexpm", "820e9db7550a62c7d63b760a8da51ab2341ba425563955db005baadcb403b046"},
+  "insertable": {:hex, :insertable, "1.0.0", "879c7023b5491bbb694dff78422c94faded616fda963e529916343bc6e35162f", [:mix], [{:type_check, "~> 0.8", [hex: :type_check, repo: "hexpm", optional: false]}], "hexpm", "4b3f60169221a1ace67fdfe8b0d3c35708c098e55df549d4a374b9a7b0255af4"},
   "table_rex": {:hex, :table_rex, "3.1.1", "0c67164d1714b5e806d5067c1e96ff098ba7ae79413cc075973e17c38a587caa", [:mix], [], "hexpm", "678a23aba4d670419c23c17790f9dcd635a4a89022040df7d5d772cb21012490"},
+  "type_check": {:hex, :type_check, "0.13.4", "2df7b3da984c560d2d05c81ae549cf236771388d8d36e9cb7c08d4923b58686d", [:mix], [{:credo, "~> 1.5", [hex: :credo, repo: "hexpm", optional: true]}, {:stream_data, "~> 0.5.0", [hex: :stream_data, repo: "hexpm", optional: true]}], "hexpm", "a3480036e89dfe95b856f7d8526f978c41fe453ae14f47f97dcb5f1d5aeeeb8f"},
 }

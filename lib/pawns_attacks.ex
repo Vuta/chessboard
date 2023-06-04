@@ -5,12 +5,12 @@ defmodule PawnsAttacks do
     white_table =
       0..63
       |> Enum.map(&(generate_attacks(:white, &1)))
-      |> List.to_tuple()
+      |> Arrays.new()
 
     black_table =
       0..63
       |> Enum.map(&(generate_attacks(:black, &1)))
-      |> List.to_tuple()
+      |> Arrays.new()
 
     {white_table, black_table}
   end

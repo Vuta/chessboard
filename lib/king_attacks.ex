@@ -4,7 +4,7 @@ defmodule KingAttacks do
   def table do
     0..63
     |> Enum.map(&generate_attacks/1)
-    |> List.to_tuple()
+    |> Arrays.new()
   end
 
   def generate_attacks(square) do

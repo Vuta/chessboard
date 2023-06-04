@@ -20,13 +20,13 @@ defmodule PawnsAttacksTest do
 
   test "attack table for pawns is generated correctly", state do
     for n <- [8, 16, 24, 32, 40, 48] do
-      assert set_board(n + 9, n + 9) == elem(state[:white_table], n)
-      assert set_board(n - 7, n - 7) == elem(state[:black_table], n)
+      assert set_board(n + 9, n + 9) == state[:white_table][n]
+      assert set_board(n - 7, n - 7) == state[:black_table][n]
     end
 
     for n <- [15, 23, 31, 39, 47, 55] do
-      assert set_board(n + 7, n + 7) == elem(state[:white_table], n)
-      assert set_board(n - 9, n - 9) == elem(state[:black_table], n)
+      assert set_board(n + 7, n + 7) == state[:white_table][n]
+      assert set_board(n - 9, n - 9) == state[:black_table][n]
     end
 
     squares =
@@ -39,8 +39,8 @@ defmodule PawnsAttacksTest do
       Enum.to_list(49..54)
 
     for n <- squares do
-      assert set_board(n + 7, n + 9) == elem(state[:white_table], n)
-      assert set_board(n - 7, n - 9) == elem(state[:black_table], n)
+      assert set_board(n + 7, n + 9) == state[:white_table][n]
+      assert set_board(n - 7, n - 9) == state[:black_table][n]
     end
   end
 

@@ -27,7 +27,7 @@ defmodule KnightsAttacksTest do
     for n <- squares do
       board = set_board(n + 17, n + 15, n + 10, n + 6, n - 15, n - 17, n - 6, n - 10)
 
-      assert board == elem(state[:table], n)
+      assert board == state[:table][n]
     end
   end
 

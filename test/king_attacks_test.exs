@@ -30,7 +30,7 @@ defmodule KingAttacksTest do
     for n <- squares do
       board = set_board(n + 8, n + 9, n + 7, n + 1, n - 8, n - 9, n - 7, n - 1)
 
-      assert board == elem(state[:table], n)
+      assert board == state[:table][n]
     end
   end
 
