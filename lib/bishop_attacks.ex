@@ -2,36 +2,55 @@ defmodule BishopAttacks do
   import Bitwise
 
   def mask(square) do
-    current_rank = div(square, 8)
-    current_file = rem(square, 8)
+    rank = div(square, 8)
+    file = rem(square, 8)
 
-    one = for i <- (current_rank + 1)..6, j <- (current_file + 1)..6,
-      i <= 6, j <= 6, i - current_rank == j - current_file, reduce: 0 do
-      acc -> acc ||| 1 <<< (i * 8 + j)
-    end
-
-    two = for i <- (current_rank + 1)..6, j <- 1..(current_file - 1),
-      current_file - 1 >= 1,
-      i <= 6, j >= 1, i - current_rank == current_file - j, reduce: 0 do
-      acc -> acc ||| 1 <<< (i * 8 + j)
-    end
-
-    three = for i <- 1..(current_rank - 1), j <- (current_file + 1)..6,
-      current_rank - 1 >= 1,
-      i >= 1, j <= 6, current_rank - i == j - current_file, reduce: 0 do
-      acc -> acc ||| 1 <<< (i * 8 + j)
-    end
-
-    four = for i <- 1..(current_rank - 1), j <- 1..(current_file - 1),
-      current_rank - 1 >= 1, current_file - 1 >= 1,
-      i >= 1, j >= 1, current_rank - i == current_file - j, reduce: 0 do
-      acc -> acc ||| 1 <<< (i * 8 + j)
-    end
+    one = mask(0, rank + 1, file + 1, 1, 1)
+    two = mask(0, rank + 1, file - 1, 1, -1)
+    three = mask(0, rank - 1, file + 1, -1, 1)
+    four =  mask(0, rank - 1, file - 1, -1, -1)
 
     one ||| two ||| three ||| four
   end
 
-  def relevant_blockers(square) do
-    Helper.carry_rippler(mask(square), Arrays.new([]))
+  def relevant_blockers(mask) do
+    Helper.carry_rippler(mask, Arrays.new([]))
+  end
+
+  def attack(square, blocker) do
+    rank = div(square, 8)
+    file = rem(square, 8)
+
+    one = attack(0, rank + 1, file + 1, 1, 1, blocker)
+    two = attack(0, rank + 1, file - 1, 1, -1, blocker)
+    three = attack(0, rank - 1, file + 1, -1, 1, blocker)
+    four =  attack(0, rank - 1, file - 1, -1, -1, blocker)
+
+    one ||| two ||| three ||| four
+  end
+
+  def attack(result, 8, _, _, _, _), do: result
+  def attack(result, _, 8, _, _, _), do: result
+  def attack(result, -1, _, _, _, _), do: result
+  def attack(result, _, -1, _, _, _), do: result
+  def attack(result, rank, file, dr, df, blocker) do
+    bit = 1 <<< (rank * 8 + file)
+    result = result ||| bit
+
+    if (bit &&& blocker) == 0 do
+      attack(result, rank + dr, file + df, dr, df, blocker)
+    else
+      result
+    end
+  end
+
+  defp mask(result, 8, _, _, _), do: result
+  defp mask(result, _, 8, _, _), do: result
+  defp mask(result, -1, _, _, _), do: result
+  defp mask(result, _, -1, _, _), do: result
+  defp mask(result, rank, file, dr, df) do
+    bit = 1 <<< (rank * 8 + file)
+
+    mask(result ||| bit, rank + dr, file + df, dr, df)
   end
 end
