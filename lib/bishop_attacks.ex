@@ -30,4 +30,8 @@ defmodule BishopAttacks do
 
     one ||| two ||| three ||| four
   end
+
+  def relevant_blockers(square) do
+    Helper.carry_rippler(mask(square), Arrays.new([]))
+  end
 end

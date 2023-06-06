@@ -21,4 +21,8 @@ defmodule RookAttacks do
 
     file_mask ||| rank_mask
   end
+
+  def relevant_blockers(square) do
+    Helper.carry_rippler(mask(square), Arrays.new([]))
+  end
 end
