@@ -44,10 +44,10 @@ defmodule BishopAttacks do
     end
   end
 
-  defp mask(result, 8, _, _, _), do: result
-  defp mask(result, _, 8, _, _), do: result
-  defp mask(result, -1, _, _, _), do: result
-  defp mask(result, _, -1, _, _), do: result
+  defp mask(result, rank, _file, _, _) when rank >= 7, do: result
+  defp mask(result, _rank, file, _, _) when file >= 7, do: result
+  defp mask(result, rank, _file, _, _) when rank <= 0, do: result
+  defp mask(result, _rank, file, _, _) when file <= 0, do: result
   defp mask(result, rank, file, dr, df) do
     bit = 1 <<< (rank * 8 + file)
 
