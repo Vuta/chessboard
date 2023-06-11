@@ -1,6 +1,61 @@
 defmodule BishopAttacks do
   import Bitwise
 
+  @mask_bits_count Arrays.new([
+    6, 5, 5, 5, 5, 5, 5, 6, 5, 5, 5, 5, 5, 5, 5, 5,
+    5, 5, 7, 7, 7, 7, 5, 5, 5, 5, 7, 9, 9, 7, 5, 5,
+    5, 5, 7, 9, 9, 7, 5, 5, 5, 5, 7, 7, 7, 7, 5, 5,
+    5, 5, 5, 5, 5, 5, 5, 5, 6, 5, 5, 5, 5, 5, 5, 6
+  ])
+
+  def table do
+    magic = %Magic{}.bishop
+    Enum.map(0..63, fn square ->
+      mask = mask(square)
+      blockers = relevant_blockers(mask)
+      count = @mask_bits_count[square]
+      arr = Arrays.new(0..(1 <<< count))
+      Enum.reduce(blockers, arr, fn blocker, attacks ->
+        <<index::64 >> = <<blocker * magic[square]::64>>
+        index = index >>> (64 - count)
+        attacks = put_in(attacks[index], attack(square, blocker))
+
+        attacks
+      end)
+    end)
+  end
+
+  def test do
+    table = table()
+    Enum.each(63..0, fn square ->
+      mask = mask(square)
+      blockers = relevant_blockers(mask)
+      IO.puts("=========== Mask #{square} ================")
+      Helper.print_board(mask)
+
+      Enum.each(blockers, fn blocker ->
+        IO.puts("=========== Blocker #{blocker} ================")
+        Helper.print_board(blocker)
+
+        attack = get(table, square, blocker)
+        IO.puts("=========== Attack #{attack} ================")
+        Helper.print_board(attack)
+
+        IO.gets("continue?")
+      end)
+    end)
+  end
+
+  def get(table, square, blocker) do
+    magic = %Magic{}.bishop
+    mask = mask(square)
+    blocker = blocker &&& mask
+    <<index::64>> = <<blocker * magic[square]::64>>
+    index = index >>> (64 - @mask_bits_count[square])
+
+    Enum.at(table, square)[index]
+  end
+
   def mask(square) do
     rank = div(square, 8)
     file = rem(square, 8)
