@@ -55,9 +55,10 @@ defmodule Helper do
   end
 
   defp test_magic(_i, true, _magic, _count, _used, _blockers, _attacks), do: {:fail, 0}
-  defp test_magic(i, _, magic, count, _used, _blockers, _attacks) when i == count, do: {:ok, magic}
+  defp test_magic(i, _, magic, count, _used, _blockers, _attacks) when i == (1 <<< count), do: {:ok, magic}
   defp test_magic(i, fail, magic, count, used, blockers, attacks) do
-    index = ((blockers[i] * magic) &&& 0xFF00000000000000) >>> (64 - count)
+    <<index::64>> = <<blockers[i] * magic::64>>
+    index = index >>> (64 - count)
     attack = Enum.at(attacks, i)
     {a, b} = cond do
       used[index] == 0 ->
