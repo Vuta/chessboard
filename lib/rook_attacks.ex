@@ -27,37 +27,29 @@ defmodule RookAttacks do
   end
 
   def attack(square, blocker) do
-    current_rank = div(square, 8)
-    current_file = rem(square, 8)
+    rank = div(square, 8)
+    file = rem(square, 8)
 
-    file_attack =
-      [1, 2, 3, 4, 5, 6, 7]
-      |> List.delete(current_rank)
-      |> Enum.reduce_while(0, fn rank, acc ->
-        bit = 1 <<< (rank * 8 + current_file)
-        acc = acc ||| bit
+    one = attack(0, rank + 1, file, 1, 0, blocker)
+    two = attack(0, rank - 1, file, -1, 0, blocker)
+    three = attack(0, rank, file + 1, 0, 1, blocker)
+    four = attack(0, rank, file - 1, 0, -1, blocker)
 
-        if (bit &&& blocker) == 0 do
-          {:cont, acc}
-        else
-          {:halt, acc}
-        end
-      end)
+    one ||| two ||| three ||| four
+  end
 
-    rank_attack =
-      [1, 2, 3, 4, 5, 6, 7]
-      |> List.delete(current_file)
-      |> Enum.reduce_while(0, fn file, acc ->
-        bit = 1 <<< (current_rank * 8 + file)
-        acc = acc ||| bit
+  defp attack(result, 8, _, _, _, _), do: result
+  defp attack(result, _, 8, _, _, _), do: result
+  defp attack(result, -1, _, _, _, _), do: result
+  defp attack(result, _, -1, _, _, _), do: result
+  defp attack(result, rank, file, dr, df, blocker) do
+    bit = 1 <<< (rank * 8 + file)
+    result = result ||| bit
 
-        if (bit &&& blocker) == 0 do
-          {:cont, acc}
-        else
-          {:halt, acc}
-        end
-      end)
-
-    file_attack ||| rank_attack
+    if (bit &&& blocker) == 0 do
+      attack(result, rank + dr, file + df, dr, df, blocker)
+    else
+      result
+    end
   end
 end

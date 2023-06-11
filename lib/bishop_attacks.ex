@@ -29,11 +29,11 @@ defmodule BishopAttacks do
     one ||| two ||| three ||| four
   end
 
-  def attack(result, 8, _, _, _, _), do: result
-  def attack(result, _, 8, _, _, _), do: result
-  def attack(result, -1, _, _, _, _), do: result
-  def attack(result, _, -1, _, _, _), do: result
-  def attack(result, rank, file, dr, df, blocker) do
+  defp attack(result, 8, _, _, _, _), do: result
+  defp attack(result, _, 8, _, _, _), do: result
+  defp attack(result, -1, _, _, _, _), do: result
+  defp attack(result, _, -1, _, _, _), do: result
+  defp attack(result, rank, file, dr, df, blocker) do
     bit = 1 <<< (rank * 8 + file)
     result = result ||| bit
 
