@@ -2,6 +2,80 @@ defmodule Helper do
   alias TableRex.Table
   import Bitwise
 
+  @pieces_map %{
+    "P" => :w_pawns,
+    "N" => :w_knights,
+    "B" => :w_bishops,
+    "R" => :w_rooks,
+    "Q" => :w_queens,
+    "K" => :w_king,
+    "p" => :b_pawns,
+    "n" => :b_knights,
+    "b" => :b_bishops,
+    "r" => :b_rooks,
+    "q" => :b_queens,
+    "k" => :b_king
+  }
+
+  @castling_map %{
+    "K" => 0b0001,
+    "Q" => 0b0010,
+    "k" => 0b0100,
+    "q" => 0b1000,
+    "-" => 0b0000
+  }
+
+  @square_map %{
+    "a3" => 16, "b3" => 17, "c3" => 18, "d3" => 19,
+    "e3" => 20, "f3" => 21, "g3" => 22, "h3" => 23,
+    "a6" => 40, "b6" => 41, "c6" => 42, "d6" => 43,
+    "e6" => 44, "f6" => 45, "g6" => 46, "h6" => 47
+  }
+
+  def parse_fen(fen) do
+    board = %Board{}
+    [pieces, active, castle, enpassant, half_move, full_move] = String.split(fen, " ") 
+
+    position =
+      pieces
+      |> String.split("", trim: true)
+      |> parse_position(board.position, 7, 0)
+
+    castle = parse_castling_rights(castle)
+    active = if active == "w", do: :white, else: :black
+
+    %{
+      board |
+      position: position,
+      active: active,
+      castle: castle,
+      enpassant: @square_map[enpassant],
+      half_move: String.to_integer(half_move),
+      full_move: String.to_integer(full_move),
+    }
+  end
+
+  defp parse_position([], position, _rank, _file), do: position
+  defp parse_position(["/" | pieces], position, rank, _file) do
+    parse_position(pieces, position, rank - 1, 0)
+  end
+  defp parse_position([piece | pieces], position, rank, file) when piece >= "1" and piece <= "8" do
+    parse_position(pieces, position, rank, rem(file + String.to_integer(piece), 8))
+  end
+  defp parse_position([piece | pieces], position, rank, file) do
+    piece_type = @pieces_map[piece]
+    new_position = set_piece(position[piece_type], rank * 8 + file)
+    position = Map.replace(position, piece_type, new_position)
+
+    parse_position(pieces, position, rank, file + 1)
+  end
+
+  defp parse_castling_rights(castle) do
+    for c <- String.split(castle, "", trim: true), reduce: 0b0000 do
+      acc -> acc ||| @castling_map[c]
+    end
+  end
+
   def set_piece(board, square), do: board ||| (1 <<< square)
 
   def count_bits(board) do
